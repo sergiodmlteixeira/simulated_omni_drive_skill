@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+
+<launch>
+
+  <arg name='action_name' default="SimulatedOmniDriveSkill"/>
+
+  <node pkg="simulated_omni_drive_skill_server" type="simulated_omni_drive_skill.py" name="simulated_omni_drive_skill" output="screen">
+      <param name='action_name' value='$(arg action_name)' />
+  </node>
+
+</launch>

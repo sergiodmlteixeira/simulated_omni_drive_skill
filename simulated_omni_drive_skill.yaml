@@ -1,0 +1,9 @@
+skill_name: simulated_omni_drive_skill
+
+server_language: python
+
+goals:
+  x: float32
+  y: float32
+  ori: float32
+  speed: float32
