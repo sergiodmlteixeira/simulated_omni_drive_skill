@@ -6,14 +6,23 @@ find_package(catkin REQUIRED COMPONENTS
   rospy
   roscpp
   simulated_omni_drive_skill_msgs
+  gazebo_msgs
 )
 
 catkin_python_setup()
 
 catkin_package(
- CATKIN_DEPENDS rospy actionlib simulated_omni_drive_skill_msgs
+ CATKIN_DEPENDS rospy actionlib simulated_omni_drive_skill_msgs gazebo_msgs
 )
 
 include_directories(
   ${catkin_INCLUDE_DIRS}
+)
+
+catkin_install_python(PROGRAMS src/simulated_omni_drive_skill/simulated_omni_drive_skill.py src/simulated_omni_drive_skill_class/simulated_omni_drive_skill_class.py
+                      DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+)
+
+install(DIRECTORY launch
+   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
 )
