@@ -1,86 +1,88 @@
 import rospy
 import actionlib
-
 from simulated_omni_drive_skill_msgs.msg import SimulatedOmniDriveSkillAction, SimulatedOmniDriveSkillResult, SimulatedOmniDriveSkillFeedback
-
 from gazebo_msgs.srv import GetModelState
 from geometry_msgs.msg import Twist
 from numpy import abs, sign, arctan2, arctan, sqrt
 from tf.transformations import euler_from_quaternion
 from math import atan2, cos, sin
 
-ori_thresh = 0.01
+# Define angle and position error thresholds
 MAX_ETF = 0.005
 MAX_EDF = 0.005
-HIST_ETF = 0.1
-GAIN_FWD = 0.2
 
-ROTATE = 0
-GO_FWD = 1
-FINAL_ROT = 2
-STOP = 3
-
+# Simulates omni-drive publishing a Twist message to
+# a /cmd_vel topic
 class SimulatedOmniDriveSkill(object):
 
     def __init__(self, action_name='SimulatedOmniDriveSkill'):
 
+        # Standard skill generation initialization
         self.action_name = action_name
         self.simulated_omni_drive_skill_server = actionlib.SimpleActionServer(self.action_name, SimulatedOmniDriveSkillAction, self.execute_skill, False)
         self.simulated_omni_drive_skill_server.start()
         self.percentage = 0
         self.outcomes = ["succeeded", "aborted", "preempted"]
 
+        # Waits for /gazebo/get_model_state to be ready and creates a ServiceProxy
         rospy.wait_for_service('/gazebo/get_model_state')
         self.get_model_state = rospy.ServiceProxy('/gazebo/get_model_state', GetModelState)
 
+        # Publisher for the robot speed
         self.pub_vel = rospy.Publisher('friday/cmd_vel', Twist, queue_size=10)
+
+        # ROS rate (10 Hz)
         self.rate = rospy.Rate(10)
 
-        self.state = ROTATE
-
-    def check_pos_diff(self, vel, goal, current_pos):
-
-        vel.linear.x = goal.speed
-        return vel
-
-    def check_ori_diff(self, vel, goal, current_pos):
-
-        quat = [current_pos.pose.orientation.x, current_pos.pose.orientation.y, current_pos.pose.orientation.z, current_pos.pose.orientation.w]
-        diff = goal.ori - euler_from_quaternion(quat)[2]
-        print(diff)
-        if abs(diff) > ori_thresh:
-            vel.angular.z = goal.speed * sign(diff)
-            return vel, False
-        return vel, True
-
+    # Calculates the error between the robot angle and the angle between
+    # the final position and current position
     def theta_error(self, goal, current_pos, robot_angle):
 
         theta_f = atan2(goal.x - current_pos.pose.position.x, goal.y - current_pos.pose.position.y)
-
         return theta_f + robot_angle
 
+    # Calculates the error between the current robot angle and
+    # the desired robot angle
+    def theta_error_final(self, robot_angle, goal):
+
+        return robot_angle - goal.ori
+
+    # Calculates the error between the robot current position
+    # and the desired final position
     def pos_error(self, goal, current_pos):
+
         return sqrt((goal.x - current_pos.pose.position.x)*(goal.x - current_pos.pose.position.x) + (goal.y - current_pos.pose.position.y)*(goal.y - current_pos.pose.position.y))
 
+    # Moves the robot to the desired pose based on the angle
     def gotoxytheta_omni(self, vel, goal, current_pos):
 
+        # Initizalizes useful variables
         finished = False
+
+        # When 0, neither position or orientation are correct
+        # When 1, one of them is correct and the other not
+        # When 2, both are correct and skill is finished
         cont = 0
 
+        # Converts robot position from quaternions to euler angles
         quat = [current_pos.pose.orientation.x, current_pos.pose.orientation.y, current_pos.pose.orientation.z, current_pos.pose.orientation.w]
         robot_angle = euler_from_quaternion(quat)[2]
 
+        # Calculates angle and position errors
         theta_error = self.theta_error(goal, current_pos, robot_angle)
-        theta_error_final = robot_angle - goal.ori
-        
+        theta_error_final = self.theta_error_final(robot_angle, goal)
         pos_error = self.pos_error(goal, current_pos)
 
+        # Check final angle error and if it's higher than threshold
+        # converge rotation to error zero, else stop rotating
         if abs(theta_error_final) > MAX_ETF:
             vel.angular.z = goal.speed * -sign(theta_error_final)
         else:
             vel.angular.z = 0
             cont+=1
 
+        # Check position error and if it's higher than threshold
+        # calculated desired linear speed, else stop 
         if pos_error > MAX_EDF:
             vel.linear.x = goal.speed * sin(theta_error)
             vel.linear.y = goal.speed * cos(theta_error)
@@ -89,6 +91,7 @@ class SimulatedOmniDriveSkill(object):
             vel.linear.y = 0
             cont+=1
 
+        # If both position and orientation are correct set finished flag to true
         if cont == 2:
             finished = True
 
@@ -103,13 +106,17 @@ class SimulatedOmniDriveSkill(object):
         feedback() method should be called when there is an evolution in the execution of the skill.
         '''
 
+        # Initialize finished flag and Twist message
         vel = Twist()
         finished = False
-        self.state = ROTATE
 
+        # Execute until flag is true
         while not finished:
 
+            # Get current pose from Gazebo
             current_pos = self.get_model_state(model_name="friday")
+
+            # Execute main method and publish calculated vel
             vel, finished = self.gotoxytheta_omni(vel, goal, current_pos)
             self.pub_vel.publish(vel)
         
