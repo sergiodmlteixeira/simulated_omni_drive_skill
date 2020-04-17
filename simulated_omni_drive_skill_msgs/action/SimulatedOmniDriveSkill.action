@@ -1,0 +1,14 @@
+#goal definition
+float32 y
+float32 x
+float32 speed
+float32 ori
+---
+#result definition
+int32 percentage
+string skillStatus
+string outcome
+---
+#feedback
+int32 percentage
+string skillStatus
