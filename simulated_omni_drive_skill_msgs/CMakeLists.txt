@@ -25,3 +25,8 @@ catkin_package(
 include_directories(
   ${catkin_INCLUDE_DIRS}
 )
+
+install(
+  DIRECTORY ../simulated_omni_drive_skill_scxml
+  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/..
+)
