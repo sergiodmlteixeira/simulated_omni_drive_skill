@@ -1,6 +1,6 @@
 # Travis configuration file for CI process for this skill
 # It will always build and run tests using the ROS Industrial industrial_ci stack
-# If you wish to also test this skill in AWS RoboMaker uncomment the lines between ###
+# If you wish to also test this skill in AWS RoboMaker swap the commented lines in env -> matrix bellow
 # For that, make sure you define all the environment variables defined in the "DOCKER_RUN_OPTS"
 # variable in your repository settings and set "AWS" to true
 
@@ -10,18 +10,8 @@ services:
 
 env:
   matrix:
-    - ROS_DISTRO="melodic"
-    #############################################################################################
-    #- TMPDIR="${CI_PROJECT_DIR}.tmp"
-    - UPSTREAM_WORKSPACE="up.rosinstall"
-    - DOWNSTREAM_WORKSPACE="down.rosinstall"
-    - NOT_TEST_DOWNSTREAM="true"
-    - AFTER_INIT=".ci_scripts/aws_init.sh"
-    - AFTER_BUILD_DOWNSTREAM_WORKSPACE=".ci_scripts/aws_simulation.sh"
-    - BUILDER="colcon"
-    - DOCKER_RUN_OPTS="-e AWS=true -e AWS_ACCESS_KEY=$AWS_ACCESS_KEY -e AWS_SECRET_KEY=$AWS_SECRET_KEY -e AWS_REGION=$AWS_REGION -e AWS_ROBOT_BUNDLE=$AWS_ROBOT_BUNDLE -e AWS_SIM_FUNCTION=$AWS_SIM_FUNCTION -e AWS_SF_ARN=$AWS_SF_ARN"
-    - ADDITIONAL_DEBS="curl unzip less python3-pip python3-apt"
-    ##############################################################################################
+    #- ROS_DISTRO="melodic"
+    - ROS_DISTRO="melodic" UPSTREAM_WORKSPACE="up.rosinstall" DOWNSTREAM_WORKSPACE="down.rosinstall" NOT_TEST_DOWNSTREAM="true" AFTER_INIT=".ci_scripts/aws_init.sh" AFTER_BUILD_DOWNSTREAM_WORKSPACE=".ci_scripts/aws_simulation.sh" BUILDER="colcon" DOCKER_RUN_OPTS="-e AWS=true -e AWS_ACCESS_KEY=$AWS_ACCESS_KEY -e AWS_SECRET_KEY=$AWS_SECRET_KEY -e AWS_REGION=$AWS_REGION -e AWS_ROBOT_BUNDLE=$AWS_ROBOT_BUNDLE -e AWS_SIM_FUNCTION=$AWS_SIM_FUNCTION -e AWS_SF_ARN=$AWS_SF_ARN" ADDITIONAL_DEBS="curl unzip less python3-pip python3-apt"
 
 install:
   - git clone --quiet --depth 1 https://github.com/ros-industrial/industrial_ci.git .industrial_ci -b master
