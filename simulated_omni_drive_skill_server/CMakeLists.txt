@@ -7,6 +7,8 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   simulated_omni_drive_skill_msgs
   gazebo_msgs
+  geometry_msgs
+  tf
 )
 
 catkin_python_setup()
