@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scxml xmlns="http://www.w3.org/2005/07/scxml" version="1.0" binding="early" name="test_skill.scxml" qt:editorversion="4.11.0" xmlns:qt="http://www.qt.io/2015/02/scxml-ext" initial="SimulatedOmniDriveSkill">
+    <qt:editorinfo initialGeometry="398.10;77.35;-20;-20;40;40"/>
+    <final id="Final_1">
+        <qt:editorinfo geometry="398.10;339.31;-20;-20;40;40" scenegeometry="398.10;339.31;378.10;319.31;40;40"/>
+    </final>
+    <state id="SimulatedOmniDriveSkill">
+        <qt:editorinfo geometry="186.59;-224;120.60;376.64;181.82;107.24" scenegeometry="186.59;-224;307.19;152.64;181.82;107.24"/>
+        <datamodel>
+            <data id="actionName" expr="&quot;SimulatedOmniDriveSkill&quot;"/>
+            <data id="actionGoal" expr="{&quot;y&quot;:10.1,&quot;x&quot;:6.3,&quot;speed&quot;:1.0,&quot;ori&quot;:0.0}">
+                <qt:editorinfo geometry="26.49;30.57;0;0;0;0"/>
+            </data>
+            <data id="actionType" expr="'simulated_omni_drive_skill_msgs/SimulatedOmniDriveSkillAction'"/>
+            <data id="actionResult" expr="{}"/>
+            <data id="outcomes" expr="[]">
+                <qt:editorinfo geometry="26.52;25.50;0;0;0;0"/>
+            </data>
+        </datamodel>
+        <transition type="external" event="succeeded" target="Final_1"/>
+    </state>
+</scxml>

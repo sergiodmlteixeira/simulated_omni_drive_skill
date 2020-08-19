@@ -17,5 +17,7 @@
   <run_depend>rospy</run_depend>
   <run_depend>roscpp</run_depend>
   <run_depend>simulated_omni_drive_skill_msgs</run_depend>
+  <test_depend>python-mock</test_depend>
+  <test_depend>rostest</test_depend>
 
 </package>

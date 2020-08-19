@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<launch>
+
+    <!-- Unit Tests -->
+    <test test-name="test_simulated_omni_drive_skill_class" pkg="simulated_omni_drive_skill_server" type="test_simulated_omni_drive_skill_class.py" />
+
+</launch>

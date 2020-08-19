@@ -1,0 +1,63 @@
+<?xml version="1.0"?>
+<launch>
+    
+    <arg name="use_apm_interface" default="true"/>
+    <arg name="use_pseudo_apm" default="true"/>
+    <arg name="use_task_manager" default="true"/>
+    <arg name="use_apm_world_model" default="true"/>
+    <arg name="use_static_world" default="false"/>
+    <arg name="init_world_model" default="true" />
+    <arg name="use_robomaker" default="true" />
+    <arg name="start_task_after_delay" default="true" />
+
+    <!-- LAUNCH TASK MANAGER -->
+    <include file="$(find task_manager)/launch/run.launch" if="$(arg use_task_manager)"/>
+    
+    <!-- LAUNCH SKILL SERVERS -->
+    <include file="$(find simulated_omni_drive_skill_server)/launch/run.launch"/>
+
+    <!-- LAUNCH APM INTERFACE -->
+    <include file="$(find apm_interface)/launch/run.launch" if="$(arg use_apm_interface)">
+        <arg name="use_pseudo_apm" value="$(arg use_pseudo_apm)"/>
+        <arg name="init_world_model" value="$(arg init_world_model)"/>
+	    <arg name="use_robomaker" value="$(arg use_robomaker)"/>
+    </include>
+
+    <!-- LAUNCH APM WORLD MODEL IN GAZEBO -->
+    <group unless="$(arg use_static_world)">
+	    <include file="$(find apm_world_model_gazebo)/launch/run.launch" if="$(arg use_apm_world_model)"/>
+    </group>
+    <group if="$(arg use_static_world)">
+        <include file="$(find apm_world_model_gazebo)/launch/spawn_static_parts.launch"/>
+    </group>
+
+    <node pkg="tf" type="static_transform_publisher" name="static_transform_publisher_camera_optical_frame" args="-0.14871436142 -0.0172332087166 0.125279950141 -0.051349529678 -0.186464085256 -0.910070234794 0.36656041583 ur10_arm_tool0 camera_gray_optical_frame 100" />
+    <node pkg="tf" type="static_transform_publisher" name="static_transform_publisher_camera_base_c1" args="-0.115 0.03 0 0 0.27 0 camera_gray_optical_frame camera_base 100" />
+    <node pkg="tf" type="static_transform_publisher" name="static_transform_publisher_camera_base_c2" args="0 0 0 0.5 -0.5 0.5 0.5 camera_base camera_base_link 100" />
+
+    <!-- DELAY TO LAUNCH A TASK AUTOMATICALLY -->
+    <group if="$(arg start_task_after_delay)">
+	    <include file="$(find task_manager_pseudo_pm)/launch/run.launch">
+		    <arg name="use_delay" value="true"/>
+	    	<arg name="node_start_delay" value="90.0"/>
+            <arg name="scxml_file" value="test_skill.scxml"/>
+            <arg name="send_scxml" value="true"/>
+            <arg name="execute_task" value="false"/>
+            <arg name="task_id" value="test"/>
+            <arg name="name_id" value="send"/>
+            <arg name="resources_path" default="$(find simulated_omni_drive_skill_server)/resources/"/>
+	    </include>
+
+	    <include file="$(find task_manager_pseudo_pm)/launch/run.launch">
+		    <arg name="use_delay" value="true"/>
+	    	<arg name="node_start_delay" value="100.0"/>
+            <arg name="scxml_file" value="test_skill.scxml"/>
+            <arg name="send_scxml" value="false"/>
+            <arg name="execute_task" value="true"/>
+            <arg name="task_id" value="test"/>
+            <arg name="name_id" value="execute"/>
+            <arg name="resources_path" default="$(find simulated_omni_drive_skill_server)/resources/"/>
+	    </include>
+    </group>
+
+</launch>

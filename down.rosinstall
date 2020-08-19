@@ -1,0 +1,24 @@
+- git:
+    local-name: osps_msgs
+    uri: git@gitlab.inesctec.pt:osps/osps_msgs.git
+    version: henrique_devel
+- git:
+    local-name: scxml_interpreter
+    uri: git@gitlab.inesctec.pt:osps/scxml_interpreter.git
+    version: master
+- git:
+    local-name: qt_smach_viewer
+    uri: 'https://github.com/ipa-led/qt_smach_viewer.git'
+    version: master
+- git:
+    local-name: bag-recorder
+    uri: git@gitlab.inesctec.pt:pedro.m.melo/bag-recorder.git
+    version: master
+- git:
+    local-name: task_manager_scxml_stack
+    uri: git@gitlab.inesctec.pt:tiago.f.pinto/task_manager_scxml_stack.git
+    version: master
+- git:
+    local-name: apm_world_model_gazebo
+    uri: git@gitlab.inesctec.pt:sergio.d.marinho/apm_world_model_gazebo.git
+    version: master

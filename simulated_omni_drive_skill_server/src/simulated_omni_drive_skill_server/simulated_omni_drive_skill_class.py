@@ -144,7 +144,8 @@ class SimulatedOmniDriveSkill(object):
         if self.simulated_omni_drive_skill_server.is_preempt_requested():
             result = self.result_constructor(status='SimulatedOmniDriveSkill Preempted', outcome='preempted')
             self.simulated_omni_drive_skill_server.set_preempted(result, result.skillStatus)
-            return
+            return True
+        return False
 
     def result_constructor(self, status, percentage=None, outcome=None):
         result = SimulatedOmniDriveSkillResult()
