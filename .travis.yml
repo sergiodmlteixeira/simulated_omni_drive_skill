@@ -15,5 +15,7 @@ env:
 
 install:
   - git clone --quiet --depth 1 https://github.com/ros-industrial/industrial_ci.git .industrial_ci -b master
+before_script:
+  - .ci_scripts/before_script.sh
 script:
   - .industrial_ci/travis.sh
