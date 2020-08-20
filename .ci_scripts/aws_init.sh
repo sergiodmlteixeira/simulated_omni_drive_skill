@@ -7,8 +7,12 @@ aws_main()
 
     if [ -f "~/.ssh/known_hosts" ]
     then
-        echo "$0: File found."
+        echo "File found."
+    else
+        echo "Not found"
     fi
+
+    git clone git@gitlab.inesctec.pt:tiago.f.pinto/task_manager_scxml_stack.git
 
     if [[ "$AWS" == "true" ]]; then
         aws_cli_install
