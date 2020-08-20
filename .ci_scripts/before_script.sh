@@ -10,9 +10,7 @@
 #fi
 
 eval $(ssh-agent -s)
-echo -e "$SSH_PRIVATE_KEY" > ~/.ssh/key
-chmod 600 ~/.ssh/key
-ssh-add ~/.ssh/key
+ssh-add <(echo "$SSH_PRIVATE_KEY" | base64 -d)
 
 mkdir -p ~/.ssh
 chmod 700 ~/.ssh
