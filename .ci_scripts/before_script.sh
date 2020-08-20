@@ -9,15 +9,9 @@
 #  echo "$SSH_SERVER_HOSTKEYS" > ~/.ssh/known_hosts
 #fi
 mkdir .ssh/
-echo -e "$SSH_PRIVATE_KEY" > .ssh/id_ed25519
-chmod 600 .ssh/id_ed25519
-cat .ssh/id_ed25519
+echo -e "$SSH_PRIVATE_KEY" > .ssh/key
+chmod 600 .ssh/key
 
 touch .ssh/known_hosts
 ssh-keyscan github.com >> .ssh/known_hosts
 ssh-keyscan gitlab.inesctec.pt >> .ssh/known_hosts
-
-if [ -n "$SSH_SERVER_HOSTKEYS" ]; then
-  # setup known hosts
-  echo -e "$SSH_SERVER_HOSTKEYS" > .ssh/known_hosts
-fi
