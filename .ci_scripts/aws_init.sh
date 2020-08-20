@@ -3,7 +3,7 @@
 aws_main()
 {
 
-    sudo apt-get -qq install -y --no-upgrade --no-install-recommends ssh ssh-client
+    apt-get -qq install -y --no-upgrade --no-install-recommends ssh ssh-client
 
     eval $(ssh-agent -s)
     # add key to agent
