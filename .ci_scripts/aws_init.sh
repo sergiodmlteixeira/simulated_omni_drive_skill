@@ -12,7 +12,7 @@ aws_main()
         echo "Not found"
     fi
 
-    git clone git@gitlab.inesctec.pt:tiago.f.pinto/task_manager_scxml_stack.git
+    #git clone git@gitlab.inesctec.pt:tiago.f.pinto/task_manager_scxml_stack.git
 
     if [[ "$AWS" == "true" ]]; then
         aws_cli_install
