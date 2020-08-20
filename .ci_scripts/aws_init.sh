@@ -3,7 +3,7 @@
 aws_main()
 {
 
-    apt-get -qq install -y --no-upgrade --no-install-recommends ssh ssh-client
+    apt-get -qq install -y --no-upgrade --no-install-recommends ssh ssh-client git
 
     eval $(ssh-agent -s)
     # add key to agent
@@ -11,6 +11,8 @@ aws_main()
     if [ -n "$SSH_SERVER_HOSTKEYS" ]; then
       mkdir -p ~/.ssh
       # setup known hosts
+      chmod 700 ~/.ssh
+      chmod 644 ~/.ssh/known_hosts
       (echo "$SSH_SERVER_HOSTKEYS" | base64 -d)  > ~/.ssh/known_hosts
     fi
 
@@ -21,7 +23,9 @@ aws_main()
         echo "Not found"
     fi
 
-    #git clone git@gitlab.inesctec.pt:tiago.f.pinto/task_manager_scxml_stack.git
+    git clone git@gitlab.inesctec.pt:tiago.f.pinto/task_manager_scxml_stack.git
+
+    ls
 
     if [[ "$AWS" == "true" ]]; then
         aws_cli_install
