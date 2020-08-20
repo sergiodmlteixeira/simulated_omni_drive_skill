@@ -8,7 +8,7 @@
     version: master
 - git:
     local-name: qt_smach_viewer
-    uri: 'https://github.com/ipa-led/qt_smach_viewer.git'
+    uri: https://github.com/ipa-led/qt_smach_viewer.git
     version: master
 - git:
     local-name: bag-recorder

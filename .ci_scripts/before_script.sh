@@ -16,5 +16,3 @@ mkdir -p ~/.ssh
 chmod 700 ~/.ssh
 ssh-keyscan gitlab.inesctec.pt >> ~/.ssh/known_hosts
 chmod 644 ~/.ssh/known_hosts
-
-git clone git@gitlab.inesctec.pt:tiago.f.pinto/task_manager_scxml_stack.git
