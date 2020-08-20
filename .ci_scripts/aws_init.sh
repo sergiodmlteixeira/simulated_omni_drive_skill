@@ -17,8 +17,13 @@ aws_main()
 
     cd
     git clone git@gitlab.inesctec.pt:tiago.f.pinto/task_manager_scxml_stack.git
+    git clone git@gitlab.inesctec.pt:osps/osps_msgs.git
+    git clone git@gitlab.inesctec.pt:osps/scxml_interpreter.git
+    git clone https://github.com/ipa-led/qt_smach_viewer.git
+    git clone git@gitlab.inesctec.pt:pedro.m.melo/bag-recorder.git
+    git clone git@gitlab.inesctec.pt:sergio.d.marinho/apm_world_model_gazebo.git
 
-    la ~/.ssh/
+    ls ~/.ssh/
 
     if [[ "$AWS" == "true" ]]; then
         aws_cli_install
