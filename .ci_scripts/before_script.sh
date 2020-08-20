@@ -8,10 +8,9 @@
 #  # setup known hosts
 #  echo "$SSH_SERVER_HOSTKEYS" > ~/.ssh/known_hosts
 #fi
-mkdir .ssh/
-echo -e "$SSH_PRIVATE_KEY" > .ssh/key
-chmod 600 .ssh/key
-
-touch .ssh/known_hosts
-ssh-keyscan github.com >> .ssh/known_hosts
-ssh-keyscan gitlab.inesctec.pt >> .ssh/known_hosts
+eval $(ssh-agent -s)
+echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+mkdir -p ~/.ssh
+chmod 700 ~/.ssh
+ssh-keyscan gitlab.inesctec.pt >> ~/.ssh/known_hosts
+chmod 644 ~/.ssh/known_hosts
