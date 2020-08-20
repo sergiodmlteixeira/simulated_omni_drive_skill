@@ -9,6 +9,8 @@
 #  echo "$SSH_SERVER_HOSTKEYS" > ~/.ssh/known_hosts
 #fi
 
+
+
 eval $(ssh-agent -s)
 ssh-add <(echo "$SSH_PRIVATE_KEY" | base64 -d)
 
@@ -16,3 +18,4 @@ mkdir -p ~/.ssh
 chmod 700 ~/.ssh
 ssh-keyscan gitlab.inesctec.pt >> ~/.ssh/known_hosts
 chmod 644 ~/.ssh/known_hosts
+

@@ -2,6 +2,14 @@
 
 aws_main()
 {
+
+    env
+
+    if [ -f "~/.ssh/known_hosts" ]
+    then
+        echo "$0: File found."
+    fi
+
     if [[ "$AWS" == "true" ]]; then
         aws_cli_install
         aws_configuration
