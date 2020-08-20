@@ -8,8 +8,10 @@
 #  # setup known hosts
 #  echo "$SSH_SERVER_HOSTKEYS" > ~/.ssh/known_hosts
 #fi
+
 eval $(ssh-agent -s)
-echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+ssh-add <(echo -e "$SSH_PRIVATE_KEY") || { res=$?; echo "could not add ssh key"; exit $res; }
+
 mkdir -p ~/.ssh
 chmod 700 ~/.ssh
 ssh-keyscan gitlab.inesctec.pt >> ~/.ssh/known_hosts
