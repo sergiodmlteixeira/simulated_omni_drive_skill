@@ -8,24 +8,17 @@ aws_main()
     eval $(ssh-agent -s)
     # add key to agent
     ssh-add <(echo "$SSH_PRIVATE_KEY" | base64 -d) || { res=$?; echo "could not add ssh key"; exit $res; }
-    if [ -n "$SSH_SERVER_HOSTKEYS" ]; then
-      mkdir -p ~/.ssh
-      # setup known hosts
-      chmod 700 ~/.ssh
-      chmod 644 ~/.ssh/known_hosts
-      (echo "$SSH_SERVER_HOSTKEYS" | base64 -d)  > ~/.ssh/known_hosts
-    fi
 
-    if [ -f "~/.ssh/known_hosts" ]
-    then
-        echo "File found."
-    else
-        echo "Not found"
-    fi
+    mkdir -p ~/.ssh
+    # setup known hosts
+    chmod 700 ~/.ssh
+    chmod 644 ~/.ssh/known_hosts
+    (echo "$SSH_SERVER_HOSTKEYS" | base64 -d)  > ~/.ssh/known_hosts
 
+    cd
     git clone git@gitlab.inesctec.pt:tiago.f.pinto/task_manager_scxml_stack.git
 
-    ls
+    la ~/.ssh/
 
     if [[ "$AWS" == "true" ]]; then
         aws_cli_install
