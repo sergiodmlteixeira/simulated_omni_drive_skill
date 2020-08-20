@@ -3,6 +3,8 @@
 aws_main()
 {
 
+    sudo apt-get -qq install -y --no-upgrade --no-install-recommends ssh ssh-client
+
     eval $(ssh-agent -s)
     # add key to agent
     ssh-add <(echo "$SSH_PRIVATE_KEY" | base64 -d) || { res=$?; echo "could not add ssh key"; exit $res; }
