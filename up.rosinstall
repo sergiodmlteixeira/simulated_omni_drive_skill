@@ -1,4 +1,0 @@
-- git:
-    local-name: task_manager_scxml_stack
-    uri: git@gitlab.inesctec.pt:tiago.f.pinto/task_manager_scxml_stack.git
-    version: master
